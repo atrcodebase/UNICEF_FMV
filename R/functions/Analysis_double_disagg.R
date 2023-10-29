@@ -341,11 +341,12 @@ analysis_func <- function(df, ap, multi_response_sep = "; "){
   if(exists("ap_dle_disg")){
     
     list_analysis <- list()
-    for (i in unique(ap_dle_disg$repeat_for)) {
-      for (j in unique(df[[i]])) {
-        df_i <- df %>% filter(df[[i]] == j)
+    for (col_i in unique(ap_dle_disg$repeat_for)) {
+      for (j in unique(df[[col_i]])) {
+        df_i <- df %>% filter(df[[col_i]] == j)
         
         res <- analyze(df_i, ap_dle_disg)
+        res$repeat_for_col <- col_i
         res$repeat_for <- j
         
         list_analysis[[length(list_analysis)+1]] <- res
@@ -356,7 +357,7 @@ analysis_func <- function(df, ap, multi_response_sep = "; "){
     
   }
   
-  if(exists("ap_no_dbl_disg")) {
+  if(exists("ap_no_dbl_disg") & nrow(ap_no_dbl_disg) != 0) {
     result_no_dbl_disag <- analyze(df, ap_no_dbl_disg)
     result_no_dbl_disag$repeat_for <- NA
   }
